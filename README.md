@@ -18,7 +18,7 @@ Unauthenticated users have read-only access (they can use search, however cannot
 
 Authenticated users have access to everything except "admin area".
 
-Admin area give administators abilities to manage users (view, block, remove, add to/remove from admin role). Admin see every user page and collection as its creator (e.g. admin can edit collection or add an item from users page). 
+Admin area give administrators abilities to manage users (view, block, remove, add to/remove from admin role). Admin see every user page and collection as its creator (e.g. admin can edit collection or add an item from users page). 
 
 Collection can be managed (edit/add/remove) only by the owner (creator) or admin.
 
