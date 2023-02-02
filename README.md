@@ -14,7 +14,7 @@
 
 A Web-app for personal collections managements (it's called items in the text below).
 
-Nonauthenticated users have read-only access (they can use search, however cannot create collections and items, create comments or likes).
+Unauthenticated users have read-only access (they can use search, however cannot create collections and items, create comments or likes).
 
 Authenticated users have access to everything except "admin area".
 
