@@ -1,0 +1,7 @@
+version: "3.9"
+services:
+  anigure:
+    image: rhinock/anigure
+    ports:
+      - "5050:5050"
+  
