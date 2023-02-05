@@ -1,7 +1,31 @@
 version: "3.9"
 services:
+
   anigure:
     image: rhinock/anigure
+    container_name: anigure
     ports:
       - "5050:5050"
-  
+    depends_on:
+      - mssql
+
+  mssql:
+    image: mcr.microsoft.com/mssql/server
+    container_name: mssql
+    restart: on-failure
+    environment:
+      - SA_PASSWORD=Brt_z!py
+      - ACCEPT_EULA=Y
+    ports:
+      - "51433:1433"
+    volumes:
+      - sqlsystem:/var/opt/mssql/
+      - sqldata:/var/opt/sqlserver/data
+      - sqllog:/var/opt/sqlserver/log
+      - sqlbackup:/var/opt/sqlserver/backup
+
+volumes:
+  sqlsystem:
+  sqldata:
+  sqllog:
+  sqlbackup:
