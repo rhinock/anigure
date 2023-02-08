@@ -2,12 +2,14 @@ version: "3.9"
 services:
 
   anigure:
-    image: rhinock/anigure:2.0
+    image: rhinock/anigure:1.1
     container_name: anigure
     ports:
-      - "5050:80"
+      - "5050:5050"
     depends_on:
       - mssql
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
 
   mssql:
     image: mcr.microsoft.com/mssql/server
