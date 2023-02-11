@@ -11,24 +11,58 @@ using System.Reflection;
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
-var connectionString = builder.Configuration.GetConnectionString("DefaultConnection") ?? throw new InvalidOperationException("Connection string 'DefaultConnection' not found.");
+var connectionString = builder.Configuration.GetConnectionString("DefaultConnection") ??
+                       throw new InvalidOperationException("Connection string 'DefaultConnection' not found.");
+
+// var connectionString = Environment.GetEnvironmentVariable("DB_CONNECTION_STRING");
+
+// builder.Services.AddDbContext<ApplicationDbContext>(options =>
+// options.UseSqlite(connectionString));
+
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
-    options.UseSqlite(connectionString));
+    options.UseSqlServer(connectionString));
+
 builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 
 builder.Services.AddDefaultIdentity<ApplicationUser>(options => options.SignIn.RequireConfirmedAccount = true)
     .AddEntityFrameworkStores<ApplicationDbContext>();
 
+var authorityUrl = builder.Configuration.GetSection("Authority").Get<string>() ??
+                   throw new InvalidOperationException("'authorityUrl' not found.");
+
 builder.Services.AddIdentityServer()
+// builder.Services.AddIdentityServer(options => 
+    // options.IssuerUri = authorityUrl)
     .AddApiAuthorization<ApplicationUser, ApplicationDbContext>();
 
 builder.Services.AddAuthentication()
     .AddIdentityServerJwt();
 
+// builder.Services.AddCors();
+// builder.Services.AddCors(options =>
+// {
+//     options.AddDefaultPolicy(builder =>
+//     {
+//         builder.AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod().SetIsOriginAllowed(_ => true);
+//     });
+// });
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("ClientPermission", policy =>
+    {
+        policy.AllowAnyHeader()
+            .AllowAnyMethod()
+            .SetIsOriginAllowed(_ => true)
+            .AllowCredentials();
+    });
+});
+
 builder.Services.AddControllersWithViews();
 builder.Services.AddRazorPages();
 
-builder.Services.Configure<JwtBearerOptions>("IdentityServerJwtBearer", o => o.Authority = "https://localhost:44494");
+builder.Services.Configure<JwtBearerOptions>(
+    "IdentityServerJwtBearer",
+    o => o.Authority = authorityUrl);
 // where 44494 is the port for the spa proxy.
 
 builder.Services.AddSwaggerGen(options =>
@@ -46,10 +80,16 @@ builder.Services.AddSwaggerGen(options =>
 
 var app = builder.Build();
 
+
+
+using (var scope = app.Services.CreateScope())
+using (var context = scope.ServiceProvider.GetService<ApplicationDbContext>())
+    context?.Database.Migrate();
+
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
-    app.UseMigrationsEndPoint();
+    // app.UseMigrationsEndPoint();
     app.UseSwagger();
     app.UseSwaggerUI();
 }
@@ -62,6 +102,20 @@ else
 app.UseHttpsRedirection();
 app.UseStaticFiles();
 app.UseRouting();
+
+app.UseCors("ClientPermission");
+// app.UseCors();
+// app.UseCors(x => x.AllowAnyHeader().AllowAnyMethod().AllowAnyOrigin());
+// app.UseCors(x => x
+//     .AllowAnyHeader()
+//     .AllowAnyMethod()
+//     .AllowCredentials()
+//     .WithOrigins(
+//         "http://localhost:13768",
+//         "https://localhost:44382",
+//         "https://localhost:7146",
+//         "http://localhost:5100",
+//         authorityUrl));
 
 app.UseAuthentication();
 app.UseIdentityServer();
