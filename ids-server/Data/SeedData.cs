@@ -102,6 +102,27 @@ namespace ids_server.Data
             {
                 Console.WriteLine("api scopes already added..");
             }
+
+            if (!context.IdentityResources.Any())
+            {
+                var identityResources = new List<IdentityResource>
+                {
+                    new IdentityResources.OpenId(),
+                    new IdentityResources.Profile(),
+                    new IdentityResources.Email(),
+                };
+
+                foreach (var identity in identityResources)
+                {
+                    context.IdentityResources.Add(identity.ToEntity());
+                }
+                context.SaveChanges();
+                Console.WriteLine($"Added {identityResources.Count()} identity Resources");
+            }
+            else
+            {
+                Console.WriteLine("api scopes already added..");
+            }
         }
 
         private static void SeedTestUsers(UserManager<IdentityUser> manager)
