@@ -4,6 +4,8 @@ using Microsoft.EntityFrameworkCore;
 using System.Reflection;
 using Microsoft.Extensions.Configuration;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.Extensions.DependencyInjection;
+using ids_server.Data;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -35,6 +37,11 @@ builder.Services.AddCors();
 builder.Services.AddControllersWithViews();
 
 var app = builder.Build();
+
+var serviceScope = app.Services.CreateScope();
+var conf = serviceScope.ServiceProvider.GetService<IConfiguration>();
+if (conf.GetValue("SeedData", true))
+    DataSeeder.SeedIdentityServer(serviceScope.ServiceProvider);
 
 app.UseStaticFiles();
 
