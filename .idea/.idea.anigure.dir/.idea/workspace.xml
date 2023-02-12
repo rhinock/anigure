@@ -8,15 +8,15 @@
   <component name="ChangeListManager">
     <list default="true" id="727d18e2-9a7e-4432-9082-106c5b74e87f" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/.idea.anigure.dir/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.anigure.dir/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/api/Controllers/WeatherForecastController.cs" beforeDir="false" afterPath="$PROJECT_DIR$/api/Controllers/WeatherForecastController.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/api/Program.cs" beforeDir="false" afterPath="$PROJECT_DIR$/api/Program.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/api/api.csproj" beforeDir="false" afterPath="$PROJECT_DIR$/api/api.csproj" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/ids-server/Program.cs" beforeDir="false" afterPath="$PROJECT_DIR$/ids-server/Program.cs" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="HighlightingSettingsPerFile">
+    <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/SourcesCache/b118b9588a0f23ae376fb53f5455696a978b626eff78939a31a7c53aba57b/EndpointRoutingApplicationBuilderExtensions.cs" root0="SKIP_HIGHLIGHTING" />
   </component>
   <component name="MarkdownSettingsMigration">
     <option name="stateVersion" value="1" />
@@ -26,15 +26,15 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "RunOnceActivity.OpenProjectViewOnStart": "true",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "WebServerToolWindowFactoryState": "false",
-    "nodejs_package_manager_path": "npm",
-    "vue.rearranger.settings.migration": "true"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;WebServerToolWindowFactoryState&quot;: &quot;false&quot;,
+    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
+    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   }
-}]]></component>
+}</component>
   <component name="RunManager" selected=".NET Launch Settings Profile.ids-server: https">
     <configuration name="api: IIS Express" type="LaunchSettings" factoryName=".NET Launch Settings Profile">
       <option name="LAUNCH_PROFILE_PROJECT_FILE_PATH" value="$PROJECT_DIR$/api/api.csproj" />
@@ -144,4 +144,23 @@
   </component>
   <component name="UnityCheckinConfiguration" checkUnsavedScenes="true" />
   <component name="UnityUnitTestConfiguration" currentTestLauncher="NUnit" />
+  <component name="XDebuggerManager">
+    <breakpoint-manager>
+      <breakpoints>
+        <line-breakpoint enabled="true" type="DotNet Breakpoints">
+          <url>file://$PROJECT_DIR$/ids-server/Quickstart/Account/AccountController.cs</url>
+          <line>82</line>
+          <properties documentPath="C:\github\rhinock\anigure\ids-server\Quickstart\Account\AccountController.cs" initialLine="82" containingFunctionPresentation="method 'Login'">
+            <startOffsets>
+              <option value="3386" />
+            </startOffsets>
+            <endOffsets>
+              <option value="3465" />
+            </endOffsets>
+          </properties>
+          <option name="timeStamp" value="1" />
+        </line-breakpoint>
+      </breakpoints>
+    </breakpoint-manager>
+  </component>
 </project>
