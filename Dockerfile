@@ -25,7 +25,7 @@ ENV Kestrel__Certificates__Default__Password="P@ssw0rd"
 EXPOSE 80
 EXPOSE 443
 EXPOSE 442
-EXPOSE 5050
+EXPOSE 44494
 COPY --from=dotnet-publish /app/publish .
 COPY --from=node-builder /node/build ./wwwroot
 ENTRYPOINT ["dotnet", "anigure.dll"]
