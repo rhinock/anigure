@@ -7,6 +7,8 @@ using anigure.Models;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.OpenApi.Models;
 using System.Reflection;
+using Microsoft.AspNetCore.DataProtection;
+using Microsoft.AspNetCore.HttpOverrides;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -30,9 +32,9 @@ builder.Services.AddDefaultIdentity<ApplicationUser>(options => options.SignIn.R
 var authorityUrl = builder.Configuration.GetSection("Authority").Get<string>() ??
                    throw new InvalidOperationException("'authorityUrl' not found.");
 
-builder.Services.AddIdentityServer()
-// builder.Services.AddIdentityServer(options => 
-    // options.IssuerUri = authorityUrl)
+// builder.Services.AddIdentityServer()
+builder.Services.AddIdentityServer(options => 
+    options.IssuerUri = authorityUrl)
     .AddApiAuthorization<ApplicationUser, ApplicationDbContext>();
 
 builder.Services.AddAuthentication()
@@ -78,6 +80,12 @@ builder.Services.AddSwaggerGen(options =>
     options.IncludeXmlComments(Path.Combine(AppContext.BaseDirectory, xmlFilename));
 });
 
+// builder.Services.AddDataProtection()
+//     .PersistKeysToFileSystem(new DirectoryInfo(Environment.CurrentDirectory))
+//     .SetDefaultKeyLifetime(TimeSpan.FromDays(36500));
+
+builder.Services.AddDataProtection().SetApplicationName("anigure");
+
 var app = builder.Build();
 
 using (var scope = app.Services.CreateScope())
@@ -100,6 +108,14 @@ else
 app.UseHttpsRedirection();
 app.UseStaticFiles();
 app.UseRouting();
+
+// var options = new ForwardedHeadersOptions
+// {
+//     ForwardedHeaders = ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto
+// };
+// options.KnownNetworks.Clear();
+// options.KnownProxies.Clear();
+// app.UseForwardedHeaders(options); // https://stackoverflow.com/questions/43267113/how-to-configure-usecookieauthentication-behind-a-load-balancer
 
 app.UseCors("ClientPermission");
 // app.UseCors();

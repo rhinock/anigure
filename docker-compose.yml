@@ -8,7 +8,7 @@ services:
     container_name: anigure
     restart: on-failure
     ports:
-      - "5050:5050"
+      - "44494:44494"
     depends_on:
       - mssql
 
