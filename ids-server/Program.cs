@@ -23,9 +23,25 @@ builder.Services.AddIdentityServer()
             AllowedGrantTypes = GrantTypes.ClientCredentials,
             ClientSecrets = { new Secret("SuperSecretPassword".Sha256()) },
             AllowedScopes = { "api.read" }
+        },
+        new Client
+        {
+            ClientId = "interactive",
+
+            AllowedGrantTypes = GrantTypes.Code,
+            RequireClientSecret = false,
+
+            RedirectUris = { "http://localhost:3000/signin-oidc" },
+            PostLogoutRedirectUris = { "http://localhost:3000" },
+
+            AllowedScopes = { "openid", "profile", "api.read" }
         }
     })
-    .AddInMemoryIdentityResources(new List<IdentityResource>())
+    .AddInMemoryIdentityResources(new List<IdentityResource>
+    {
+        new IdentityResources.OpenId(),
+        new IdentityResources.Profile()
+    })
     .AddTestUsers(new List<TestUser>
     {
         new TestUser
@@ -36,11 +52,18 @@ builder.Services.AddIdentityServer()
         }
     });
 
+builder.Services.AddCors();
+
 builder.Services.AddControllersWithViews();
 
 var app = builder.Build();
 
 app.UseStaticFiles();
+
+app.UseCors(config => config
+    .AllowAnyOrigin()
+    .AllowAnyHeader()
+    .AllowAnyMethod());
 
 app.UseRouting();
 
