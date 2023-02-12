@@ -6,12 +6,20 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.DependencyInjection;
 using ids_server.Data;
+using Microsoft.AspNetCore.Identity;
 
 var builder = WebApplication.CreateBuilder(args);
 
 var connectStr = builder.Configuration.GetConnectionString("DefaultConnection");
 
 var migrationAssembly = typeof(Program).GetTypeInfo().Assembly.GetName().Name;
+
+builder.Services.AddDbContext<ApplicationDbContext>(options =>
+{
+    options.UseSqlite(connectStr, opt => opt.MigrationsAssembly(migrationAssembly));
+});
+
+builder.Services.AddIdentity<IdentityUser, IdentityRole>().AddEntityFrameworkStores<ApplicationDbContext>();
 
 builder.Services.AddIdentityServer()
     .AddConfigurationStore(options =>
@@ -22,15 +30,7 @@ builder.Services.AddIdentityServer()
     {
         options.ConfigureDbContext = builder => builder.UseSqlite(connectStr, opt => opt.MigrationsAssembly(migrationAssembly));
     })
-    .AddTestUsers(new List<TestUser>
-    {
-        new TestUser
-        {
-            SubjectId = "Alice",
-            Username = "alice",
-            Password = "alice"
-        }
-    });
+    .AddAspNetIdentity<IdentityUser>();
 
 builder.Services.AddCors();
 

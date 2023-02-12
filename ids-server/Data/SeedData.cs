@@ -1,6 +1,9 @@
 ﻿using Duende.IdentityServer.EntityFramework.DbContexts;
 using Duende.IdentityServer.EntityFramework.Mappers;
 using Duende.IdentityServer.Models;
+using IdentityModel;
+using System.Security.Claims;
+using Microsoft.AspNetCore.Identity;
 
 namespace ids_server.Data
 {
@@ -13,7 +16,12 @@ namespace ids_server.Data
             var context = serviceProvider
                 .GetRequiredService<ConfigurationDbContext>();
 
+            var userMng = serviceProvider
+                .GetRequiredService<UserManager<IdentityUser>>();
+
             DataSeeder.SeedData(context);
+
+            DataSeeder.SeedTestUsers(userMng);
         }
 
         private static void SeedData(ConfigurationDbContext context)
@@ -93,6 +101,41 @@ namespace ids_server.Data
             else
             {
                 Console.WriteLine("api scopes already added..");
+            }
+        }
+
+        private static void SeedTestUsers(UserManager<IdentityUser> manager)
+        {
+            var alice = manager.FindByNameAsync("alice").Result;
+            if (alice == null)
+            {
+                alice = new IdentityUser
+                {
+                    UserName = "alice",
+                    Email = "alice@test.com",
+                    EmailConfirmed = true
+                };
+                var result = manager.CreateAsync(alice, "P@ssw0rd").Result;
+
+                if (result.Succeeded)
+                {
+                    result = manager.AddClaimsAsync(
+                        alice, 
+                        new Claim[] 
+                        {
+                            new Claim(JwtClaimTypes.Name, "Alice Smith"),
+                            new Claim(JwtClaimTypes.GivenName, "Alice"),
+                            new Claim(JwtClaimTypes.FamilyName, "Smith"),
+                            new Claim(JwtClaimTypes.WebSite, "Website"),
+                        })
+                        .Result;
+
+                    Console.WriteLine("added alice user");
+                }
+            }
+            else
+            {
+                Console.WriteLine("alice already created");
             }
         }
     }
