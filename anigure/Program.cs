@@ -2,7 +2,6 @@ using Microsoft.AspNetCore.Authentication;
 using Microsoft.EntityFrameworkCore;
 using anigure.Data;
 using anigure.Models;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.OpenApi.Models;
 using System.Reflection;
 using Microsoft.AspNetCore.DataProtection;
@@ -21,11 +20,8 @@ builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 builder.Services.AddDefaultIdentity<ApplicationUser>(options => options.SignIn.RequireConfirmedAccount = true)
     .AddEntityFrameworkStores<ApplicationDbContext>();
 
-var authorityUrl = builder.Configuration.GetSection("Authority").Get<string>() ??
-                   throw new InvalidOperationException("'authorityUrl' not found.");
-
-builder.Services.AddIdentityServer(options => 
-    options.IssuerUri = authorityUrl)
+builder.Services
+    .AddIdentityServer()
     .AddApiAuthorization<ApplicationUser, ApplicationDbContext>();
 
 builder.Services.AddAuthentication().AddIdentityServerJwt();
@@ -44,11 +40,6 @@ builder.Services.AddCors(options =>
 builder.Services.AddControllersWithViews();
 builder.Services.AddRazorPages();
 
-builder.Services.Configure<JwtBearerOptions>(
-    "IdentityServerJwtBearer",
-    o => o.Authority = authorityUrl);
-// where 44494 is the port for the spa proxy.
-
 builder.Services.AddSwaggerGen(options =>
 {
     options.SwaggerDoc("v1", new OpenApiInfo
@@ -62,7 +53,9 @@ builder.Services.AddSwaggerGen(options =>
     options.IncludeXmlComments(Path.Combine(AppContext.BaseDirectory, xmlFilename));
 });
 
-builder.Services.AddDataProtection().SetApplicationName("anigure");
+builder.Services
+    .AddDataProtection()
+    .SetApplicationName("anigure");
 
 var app = builder.Build();
 

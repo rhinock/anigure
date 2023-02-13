@@ -4,7 +4,8 @@ services:
   anigure:
     env_file:
       - .env
-    image: rhinock/anigure:2.0
+    build: .
+    image: rhinock/anigure:2.1
     container_name: anigure
     restart: on-failure
     ports:
