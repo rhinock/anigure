@@ -4,29 +4,40 @@ using anigure.Data;
 using anigure.Models;
 using Microsoft.OpenApi.Models;
 using System.Reflection;
+using anigure.Abstractions;
+using anigure.Extensions;
+using anigure.Helpers;
 using Microsoft.AspNetCore.DataProtection;
+using Microsoft.AspNetCore.Identity;
 
 var builder = WebApplication.CreateBuilder(args);
+var configuration = builder.Configuration;
+var services = builder.Services;
 
 // Add services to the container.
-var connectionString = builder.Configuration.GetConnectionString("DefaultConnection") ??
+var connectionString = configuration.GetConnectionString("DefaultConnection") ??
                        throw new InvalidOperationException("Connection string 'DefaultConnection' not found.");
 
-builder.Services.AddDbContext<ApplicationDbContext>(options =>
+services.AddDbContext<ApplicationDbContext>(options =>
     options.UseSqlServer(connectionString));
 
-builder.Services.AddDatabaseDeveloperPageExceptionFilter();
+services.AddDatabaseDeveloperPageExceptionFilter();
 
-builder.Services.AddDefaultIdentity<ApplicationUser>(options => options.SignIn.RequireConfirmedAccount = true)
+services
+    .AddDefaultIdentity<ApplicationUser>(options =>
+        options.SignIn.RequireConfirmedAccount = true)
+    .AddRoles<IdentityRole>()
     .AddEntityFrameworkStores<ApplicationDbContext>();
 
-builder.Services
+services
     .AddIdentityServer()
     .AddApiAuthorization<ApplicationUser, ApplicationDbContext>();
 
-builder.Services.AddAuthentication().AddIdentityServerJwt();
+services
+    .AddAuthentication()
+    .AddIdentityServerJwt();
 
-builder.Services.AddCors(options =>
+services.AddCors(options =>
 {
     options.AddPolicy("ClientPermission", policy =>
     {
@@ -37,10 +48,10 @@ builder.Services.AddCors(options =>
     });
 });
 
-builder.Services.AddControllersWithViews();
-builder.Services.AddRazorPages();
+services.AddControllersWithViews();
+services.AddRazorPages();
 
-builder.Services.AddSwaggerGen(options =>
+services.AddSwaggerGen(options =>
 {
     options.SwaggerDoc("v1", new OpenApiInfo
     {
@@ -53,15 +64,15 @@ builder.Services.AddSwaggerGen(options =>
     options.IncludeXmlComments(Path.Combine(AppContext.BaseDirectory, xmlFilename));
 });
 
-builder.Services
+services
     .AddDataProtection()
     .SetApplicationName("anigure");
 
+services.AddServices();
+
 var app = builder.Build();
 
-using (var scope = app.Services.CreateScope())
-using (var context = scope.ServiceProvider.GetService<ApplicationDbContext>())
-    context?.Database.Migrate();
+InitializeDatabase(app);
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
@@ -94,3 +105,45 @@ app.MapRazorPages();
 app.MapFallbackToFile("index.html");
 
 app.Run();
+
+static async void InitializeDatabase(IHost app)
+{
+    using var serviceScope = app.Services.CreateScope();
+    var services = serviceScope.ServiceProvider;
+    await using var context = services.GetService<ApplicationDbContext>();
+
+    ArgumentNullException.ThrowIfNull(context);
+
+    if (!context.AllMigrationsApplied())
+    {
+        context.Database.Migrate();
+    }
+
+    var userManagementService = services.GetRequiredService<IUserManagementService>();
+    var usersCount = await userManagementService.GetUsersCountAsync(RoleHelpers.Admin);
+
+    if (usersCount != 0)
+    {
+        return;
+    }
+
+    var roleManager = services.GetRequiredService<RoleManager<IdentityRole>>();
+
+    foreach (var roleName in RoleHelpers.RoleNames)
+    {
+        var identityRole = new IdentityRole(roleName);
+        await roleManager.CreateAsync(identityRole);
+    }
+
+    var adminUser = new ApplicationUser
+    {
+        UserName = "admin@anigure.com",
+        Email = "admin@anigure.com",
+        EmailConfirmed = true
+    };
+
+    await userManagementService.AddUserAsync(
+        adminUser,
+        "P@ssw0rd",
+        RoleHelpers.Admin);
+}
