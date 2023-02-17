@@ -1,4 +1,5 @@
-﻿using anigure.Abstractions;
+﻿using System.Security.Claims;
+using anigure.Abstractions;
 using anigure.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -47,5 +48,10 @@ public class UserManagementService : IUserManagementService
         }
 
         return result;
+    }
+
+    public async Task<ApplicationUser?> GetUserAsync(ClaimsPrincipal claimsPrincipal)
+    {
+        return await _userManager.GetUserAsync(claimsPrincipal);
     }
 }
