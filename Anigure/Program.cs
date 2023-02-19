@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Anigure.Data;
+using Anigure.Models;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -16,7 +17,7 @@ builder.Services
 builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 
 builder.Services
-    .AddDefaultIdentity<IdentityUser>()
+    .AddDefaultIdentity<ApplicationUser>()
     .AddRoles<IdentityRole>()
     .AddEntityFrameworkStores<ApplicationDbContext>();
 

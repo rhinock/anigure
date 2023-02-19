@@ -1,0 +1,58 @@
+﻿@model Anigure.Models.Users.UserViewModel
+
+@{
+    ViewData["Title"] = "Index";
+    var roles = ViewData["Roles"] as Dictionary<string, string?>;
+}
+
+<h1>Index</h1>
+
+
+<table class="table">
+
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Users![0].UserName)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Users![0].Email)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Users![0].Roles)
+            </th>
+        </tr>
+    </thead>
+
+    <tbody>
+        @if (Model.Users is not null)
+        {
+            @foreach (var user in Model.Users)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(_ => user.UserName)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(_ => user.Email)
+                    </td>
+                    <td>
+                        @if (user.Roles is not null)
+                        {
+                            @foreach (var role in user.Roles)
+                            {
+                                if (roles is not null)
+                                {
+                                    <p>
+                                        @Html.DisplayFor(_ => roles[role.RoleId])
+                                    </p>
+                                }
+                            }
+                        }
+                    </td>
+                </tr>
+            }
+        }
+    </tbody>
+
+</table>

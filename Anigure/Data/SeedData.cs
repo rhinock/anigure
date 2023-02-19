@@ -1,4 +1,5 @@
 ﻿using Anigure.Authorization;
+using Anigure.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
@@ -21,16 +22,15 @@ namespace Anigure.Data
 
         private static async Task<string> EnsureUser(IServiceProvider serviceProvider)
         {
-            var userManager = serviceProvider.GetRequiredService<UserManager<IdentityUser>>();
+            var userManager = serviceProvider.GetRequiredService<UserManager<ApplicationUser>>();
 
             var user = await userManager.FindByNameAsync(userName);
 
             if (user == null)
             {
-                user = new IdentityUser
+                user = new ApplicationUser
                 {
-                    UserName = userName,
-                    EmailConfirmed = true
+                    UserName = userName
                 };
 
                 await userManager.CreateAsync(user, password);
@@ -48,7 +48,7 @@ namespace Anigure.Data
         {
             var identityResult = await EnsureRole(serviceProvider, Constants.AdministratorsRole);
 
-            var userManager = serviceProvider.GetRequiredService<UserManager<IdentityUser>>();
+            var userManager = serviceProvider.GetRequiredService<UserManager<ApplicationUser>>();
 
             var user = await userManager.FindByIdAsync(uid);
 
