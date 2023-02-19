@@ -15,7 +15,8 @@ namespace Anigure.Data
             await using var context = new ApplicationDbContext(options);
 
             var adminId = await EnsureUser(serviceProvider);
-            await EnsureRole(serviceProvider, adminId, Constants.AdministratorsRole);
+            await EnsureAdministratorsRole(serviceProvider, adminId);
+            await EnsureRole(serviceProvider, Constants.UsersRole);
         }
 
         private static async Task<string> EnsureUser(IServiceProvider serviceProvider)
@@ -43,15 +44,9 @@ namespace Anigure.Data
             return user.Id;
         }
 
-        private static async Task<IdentityResult> EnsureRole(IServiceProvider serviceProvider, string uid, string role)
+        private static async Task<IdentityResult> EnsureAdministratorsRole(IServiceProvider serviceProvider, string uid)
         {
-            var roleManager = serviceProvider.GetRequiredService<RoleManager<IdentityRole>>();
-
-            IdentityResult identityResult;
-            if (!await roleManager.RoleExistsAsync(role))
-            {
-                identityResult = await roleManager.CreateAsync(new IdentityRole(role));
-            }
+            var identityResult = await EnsureRole(serviceProvider, Constants.AdministratorsRole);
 
             var userManager = serviceProvider.GetRequiredService<UserManager<IdentityUser>>();
 
@@ -62,7 +57,26 @@ namespace Anigure.Data
                 throw new Exception("The user not found");
             }
 
-            identityResult = await userManager.AddToRoleAsync(user, role);
+            identityResult = await userManager.AddToRoleAsync(user, Constants.AdministratorsRole);
+
+            return identityResult;
+        }
+
+        private static async Task<IdentityResult> EnsureRole(IServiceProvider serviceProvider, string role)
+        {
+            var roleManager = serviceProvider.GetRequiredService<RoleManager<IdentityRole>>();
+
+            var identityResult = new IdentityResult();
+
+            if (!await roleManager.RoleExistsAsync(role))
+            {
+                identityResult = await roleManager.CreateAsync(new IdentityRole(role));
+
+                if (!identityResult.Succeeded)
+                {
+                    throw new Exception("Role was not created");
+                }
+            }
 
             return identityResult;
         }
