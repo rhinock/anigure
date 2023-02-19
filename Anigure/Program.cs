@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Anigure.Data;
 using Anigure.Models;
+using Microsoft.AspNetCore.DataProtection;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -13,6 +14,10 @@ var connectionString =
 builder.Services
     .AddDbContext<ApplicationDbContext>(options =>
         options.UseSqlServer(connectionString));
+
+// using Microsoft.AspNetCore.DataProtection;
+builder.Services.AddDataProtection()
+    .PersistKeysToDbContext<ApplicationDbContext>();
 
 builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 
