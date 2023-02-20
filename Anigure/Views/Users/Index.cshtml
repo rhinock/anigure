@@ -1,4 +1,4 @@
-﻿@model Anigure.Models.Users.UserViewModel
+﻿@model Anigure.Models.Users.UserIndexViewModel
 
 @{
     ViewData["Title"] = "Index";
@@ -6,7 +6,6 @@
 }
 
 <h1>Index</h1>
-
 
 <table class="table">
 
@@ -49,6 +48,9 @@
                                 }
                             }
                         }
+                    </td>
+                    <td>
+                        <a asp-action="Edit" asp-route-id="@user.Id">Edit</a>
                     </td>
                 </tr>
             }

@@ -1,5 +1,4 @@
 ﻿using Anigure.Authorization;
-using Anigure.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
@@ -17,7 +16,7 @@ namespace Anigure.Data
 
             var adminId = await EnsureUser(serviceProvider);
             await EnsureAdministratorsRole(serviceProvider, adminId);
-            await EnsureRole(serviceProvider, Constants.UsersRole);
+            await EnsureRole(serviceProvider, Roles.UsersRole);
         }
 
         private static async Task<string> EnsureUser(IServiceProvider serviceProvider)
@@ -46,7 +45,7 @@ namespace Anigure.Data
 
         private static async Task<IdentityResult> EnsureAdministratorsRole(IServiceProvider serviceProvider, string uid)
         {
-            var identityResult = await EnsureRole(serviceProvider, Constants.AdministratorsRole);
+            var identityResult = await EnsureRole(serviceProvider, Roles.AdministratorsRole);
 
             var userManager = serviceProvider.GetRequiredService<UserManager<ApplicationUser>>();
 
@@ -57,7 +56,7 @@ namespace Anigure.Data
                 throw new Exception("The user not found");
             }
 
-            identityResult = await userManager.AddToRoleAsync(user, Constants.AdministratorsRole);
+            identityResult = await userManager.AddToRoleAsync(user, Roles.AdministratorsRole);
 
             return identityResult;
         }

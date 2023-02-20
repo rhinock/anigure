@@ -11,7 +11,7 @@ using System.Text.Encodings.Web;
 using System.Threading;
 using System.Threading.Tasks;
 using Anigure.Authorization;
-using Anigure.Models;
+using Anigure.Data;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
@@ -125,11 +125,11 @@ namespace Anigure.Areas.Identity.Pages.Account
 
                 if (result.Succeeded)
                 {
-                    var userRole = await _roleManager.FindByNameAsync(Constants.UsersRole);
+                    var userRole = await _roleManager.FindByNameAsync(Roles.UsersRole);
 
                     if (userRole != null)
                     {
-                        var identityResult = await _userManager.AddToRoleAsync(user, Constants.UsersRole);
+                        var identityResult = await _userManager.AddToRoleAsync(user, Roles.UsersRole);
 
                         if (!identityResult.Succeeded)
                         {

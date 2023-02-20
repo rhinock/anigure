@@ -1,14 +1,15 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Anigure.Data;
-using Anigure.Models;
 using Microsoft.AspNetCore.DataProtection;
+using Microsoft.AspNetCore.Authorization;
+using Anigure.Authorization;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
-var connectionString = 
-    builder.Configuration.GetConnectionString("DefaultConnection") ?? 
+var connectionString =
+    builder.Configuration.GetConnectionString("DefaultConnection") ??
     throw new InvalidOperationException("Connection string 'DefaultConnection' not found.");
 
 builder.Services
@@ -27,6 +28,17 @@ builder.Services
     .AddEntityFrameworkStores<ApplicationDbContext>();
 
 builder.Services.AddControllersWithViews();
+
+//builder.Services.AddAuthorization(options =>
+//{
+//    options.FallbackPolicy = new AuthorizationPolicyBuilder()
+//        .RequireAuthenticatedUser()
+//        .Build();
+//});
+
+builder.Services.AddScoped<IAuthorizationHandler, AuthenticatedUsersAuthorizationHandler>();
+builder.Services.AddScoped<IAuthorizationHandler, AdministratorsAuthorizationHandler>();
+builder.Services.AddScoped<IAuthorizationHandler, UnauthenticatedUsersAuthorizationHandler>();
 
 var app = builder.Build();
 
@@ -52,6 +64,7 @@ app.UseStaticFiles();
 
 app.UseRouting();
 
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllerRoute(

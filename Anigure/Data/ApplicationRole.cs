@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Identity;
 
-namespace Anigure.Models
+namespace Anigure.Data
 {
     public class ApplicationRole : IdentityRole
     {

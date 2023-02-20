@@ -20,7 +20,7 @@ public class HomeController : Controller
         return View();
     }
 
-    [Authorize(Roles = Constants.AdministratorsRole)]
+    [Authorize(Roles = Roles.AdministratorsRole)]
     public IActionResult Privacy()
     {
         return View();
