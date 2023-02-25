@@ -1,14 +1,14 @@
 # anigure
 
 ## Stack
-- ASP.NET Core
-- Bootstrap
 - C#
-- Elasticsearch
+- ASP.NET Core 
+  - MVC
+  - Identity
+- PostgreSQL
 - Entity Framework Core
-- MVC
-- SQL Server
-- React
+- Docker
+- Docker Compose
 
 ## Description
 
