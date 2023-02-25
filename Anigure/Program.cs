@@ -14,7 +14,7 @@ var connectionString =
 
 builder.Services
     .AddDbContext<ApplicationDbContext>(options =>
-        options.UseSqlServer(connectionString));
+        options.UseNpgsql(connectionString));
 
 // using Microsoft.AspNetCore.DataProtection;
 builder.Services.AddDataProtection()
