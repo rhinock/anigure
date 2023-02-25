@@ -1,32 +1,27 @@
 version: "3.9"
 services:
 
+  postgres:
+    image: postgres:15.2-alpine
+    container_name: postgres
+    env_file:
+      - .env
+    volumes:
+      - db-data:/var/lib/postgresql/data
+    ports:
+      - 5433:5432
+
   anigure:
     env_file:
       - .env
-    image: rhinock/anigure:2.0
+    build: .
+    image: rhinock/anigure:3.0
     container_name: anigure
     restart: on-failure
     ports:
       - "44494:44494"
     depends_on:
-      - mssql
-
-  mssql:
-    image: mcr.microsoft.com/mssql/server
-    container_name: mssql
-    env_file:
-      - .env
-    ports:
-      - "1433:1433"
-    volumes:
-      - sqlsystem:/var/opt/mssql/
-      - sqldata:/var/opt/sqlserver/data
-      - sqllog:/var/opt/sqlserver/log
-      - sqlbackup:/var/opt/sqlserver/backup
+      - postgres
 
 volumes:
-  sqlsystem:
-  sqldata:
-  sqllog:
-  sqlbackup:
+  db-data:

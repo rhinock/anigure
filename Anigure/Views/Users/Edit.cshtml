@@ -1,0 +1,57 @@
+﻿@model Anigure.Models.Users.UserEditViewModel
+
+@{
+    ViewData["Title"] = "Edit";
+    var roles = ViewData["Roles"] as Dictionary<string, string?>;
+}
+
+<h1>Edit</h1>
+
+<h4>User</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form method="post">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input type="hidden" asp-for="User.Id" />
+            <div class="form-group">
+                <label asp-for="User.UserName" class="control-label"></label>
+                <input asp-for="User.UserName" class="form-control" readonly />
+            </div>
+            <div class="form-group">
+                <label asp-for="User.Email" class="control-label"></label>
+                <input asp-for="User.Email" class="form-control" readonly />
+            </div>
+            <div class="checkbox">
+                <label asp-for="User.IsBlocked" class="form-label">
+                    <input class="form-check-input" asp-for="User.IsBlocked" />
+                    @Html.DisplayNameFor(m => m.User.IsBlocked)
+                </label>
+            </div>
+            <div class="form-group">
+                @foreach (var role in Model.User.Roles)
+                {
+                    if (roles is not null)
+                    {
+                        <p>
+                            @Html.DisplayFor(_ => roles[role.RoleId])
+                        </p>
+                    }
+                }
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Save" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

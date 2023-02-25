@@ -1,31 +1,20 @@
-FROM mcr.microsoft.com/dotnet/sdk:7.0 AS dotnet-build
-WORKDIR /src/anigure
-COPY ./anigure/*.csproj ./
-WORKDIR /src
+FROM mcr.microsoft.com/dotnet/sdk:7.0 AS build-env
+
+WORKDIR /App
+RUN mkdir Anigure
+
+# Copy sln with csproj and restore as distinct layers
 COPY *.sln ./
+COPY Anigure/*.csproj ./Anigure/
 RUN dotnet restore
+
+# Copy everything else and publish
 COPY . ./
-RUN dotnet build -c Release -o /app/build
+RUN dotnet publish -c Release -o out
 
-FROM dotnet-build AS dotnet-publish
-RUN dotnet publish -c Release -o /app/publish
-
-FROM node AS node-builder
-WORKDIR /node
-COPY ./anigure/ClientApp/package*.json ./
-RUN npm ci
-COPY ./anigure/ClientApp ./
-RUN npm run build
-
-FROM mcr.microsoft.com/dotnet/aspnet:7.0 AS final
-WORKDIR /app
-COPY anigure.pfx ./
-ENV Kestrel__Certificates__Default__Path=/app/anigure.pfx
-ENV Kestrel__Certificates__Default__Password="P@ssw0rd"
-EXPOSE 80
-EXPOSE 443
-EXPOSE 442
+# Build a runtime image
+FROM mcr.microsoft.com/dotnet/aspnet:7.0
+WORKDIR /App
+COPY --from=build-env /App/out .
 EXPOSE 44494
-COPY --from=dotnet-publish /app/publish .
-COPY --from=node-builder /node/build ./wwwroot
-ENTRYPOINT ["dotnet", "anigure.dll"]
+ENTRYPOINT ["dotnet", "Anigure.dll"]
