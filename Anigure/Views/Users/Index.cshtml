@@ -2,7 +2,6 @@
 
 @{
     ViewData["Title"] = "Index";
-    var roles = ViewData["Roles"] as Dictionary<string, string?>;
 }
 
 <h1>Index</h1>
@@ -40,10 +39,10 @@
                         {
                             @foreach (var role in user.Roles)
                             {
-                                if (roles is not null)
+                                if (Model.Roles is not null)
                                 {
                                     <p>
-                                        @Html.DisplayFor(_ => roles[role.RoleId])
+                                        @Html.DisplayFor(_ => Model.Roles[role.RoleId])
                                     </p>
                                 }
                             }

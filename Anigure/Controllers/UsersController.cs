@@ -22,27 +22,15 @@ namespace Anigure.Controllers
         [HttpGet]
         public async Task<IActionResult> Index()
         {
-            //if (!User.Identity!.IsAuthenticated)
-            //{
-            //    return Challenge();
-            //}
-
-            //var isAuthorized = User.IsInRole(Roles.AdministratorsRole);
-
-            //if (!isAuthorized)
-            //{
-            //    return Forbid();
-            //}
-
             var model = new UserIndexViewModel
             {
                 Users = await _context.Users
                     .AsNoTracking()
                     .Include(u => u.Roles)
                     .ToListAsync(),
-            };
 
-            ViewBag.Roles = _roles;
+                Roles = _roles
+            };
 
             return View(model);
         }
@@ -55,10 +43,10 @@ namespace Anigure.Controllers
                 User = await _context.Users
                     .AsNoTracking()
                     .Include(u => u.Roles)
-                    .FirstAsync(u => u.Id == id)
-            };
+                    .FirstAsync(u => u.Id == id),
 
-            ViewBag.Roles = _roles;
+                Roles = _roles
+            };
 
             return View(model);
         }
@@ -77,10 +65,10 @@ namespace Anigure.Controllers
                 User = await _context.Users
                     .AsNoTracking()
                     .Include(u => u.Roles)
-                    .FirstAsync(u => u.Id == id)
-            };
+                    .FirstAsync(u => u.Id == id),
 
-            ViewBag.Roles = _roles;
+                Roles = _roles
+            };
 
             return View(model);
         }
