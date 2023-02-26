@@ -2,8 +2,6 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Anigure.Data;
 using Microsoft.AspNetCore.DataProtection;
-using Microsoft.AspNetCore.Authorization;
-using Anigure.Authorization;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -16,8 +14,8 @@ builder.Services
     .AddDbContext<ApplicationDbContext>(options =>
         options.UseNpgsql(connectionString));
 
-// using Microsoft.AspNetCore.DataProtection;
-builder.Services.AddDataProtection()
+builder.Services
+    .AddDataProtection()
     .PersistKeysToDbContext<ApplicationDbContext>();
 
 builder.Services.AddDatabaseDeveloperPageExceptionFilter();
@@ -28,17 +26,6 @@ builder.Services
     .AddEntityFrameworkStores<ApplicationDbContext>();
 
 builder.Services.AddControllersWithViews();
-
-//builder.Services.AddAuthorization(options =>
-//{
-//    options.FallbackPolicy = new AuthorizationPolicyBuilder()
-//        .RequireAuthenticatedUser()
-//        .Build();
-//});
-
-builder.Services.AddScoped<IAuthorizationHandler, AuthenticatedUsersAuthorizationHandler>();
-builder.Services.AddScoped<IAuthorizationHandler, AdministratorsAuthorizationHandler>();
-builder.Services.AddScoped<IAuthorizationHandler, UnauthenticatedUsersAuthorizationHandler>();
 
 var app = builder.Build();
 
@@ -60,8 +47,8 @@ else
 {
     app.UseExceptionHandler("/Home/Error");
 }
-app.UseStaticFiles();
 
+app.UseStaticFiles();
 app.UseRouting();
 
 app.UseAuthentication();
@@ -70,6 +57,7 @@ app.UseAuthorization();
 app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index}/{id?}");
+
 app.MapRazorPages();
 
 app.Run();
