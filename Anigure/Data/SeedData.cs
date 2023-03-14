@@ -63,13 +63,13 @@ namespace Anigure.Data
 
         private static async Task<IdentityResult> EnsureRole(IServiceProvider serviceProvider, string role)
         {
-            var roleManager = serviceProvider.GetRequiredService<RoleManager<IdentityRole>>();
+            var roleManager = serviceProvider.GetRequiredService<RoleManager<ApplicationRole>>();
 
             var identityResult = new IdentityResult();
 
             if (!await roleManager.RoleExistsAsync(role))
             {
-                identityResult = await roleManager.CreateAsync(new IdentityRole(role));
+                identityResult = await roleManager.CreateAsync(new ApplicationRole { Name = role});
 
                 if (!identityResult.Succeeded)
                 {

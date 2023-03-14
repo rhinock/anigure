@@ -17,7 +17,7 @@
                 @Html.DisplayNameFor(model => model.Users![0].Email)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Users![0].Roles)
+                @Html.DisplayNameFor(model => model.Users![0].UserRoles)
             </th>
         </tr>
     </thead>
@@ -35,9 +35,9 @@
                         @Html.DisplayFor(_ => user.Email)
                     </td>
                     <td>
-                        @if (user.Roles is not null)
+                        @if (user.UserRoles is not null)
                         {
-                            @foreach (var role in user.Roles)
+                            @foreach (var role in user.UserRoles)
                             {
                                 if (Model.Roles is not null)
                                 {

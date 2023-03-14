@@ -26,7 +26,7 @@ namespace Anigure.Controllers
             {
                 Users = await _context.Users
                     .AsNoTracking()
-                    .Include(u => u.Roles)
+                    .Include(u => u.UserRoles)
                     .ToListAsync(),
 
                 Roles = _roles
@@ -42,7 +42,7 @@ namespace Anigure.Controllers
             {
                 User = await _context.Users
                     .AsNoTracking()
-                    .Include(u => u.Roles)
+                    .Include(u => u.UserRoles)
                     .FirstAsync(u => u.Id == id),
 
                 Roles = _roles
@@ -64,7 +64,7 @@ namespace Anigure.Controllers
             {
                 User = await _context.Users
                     .AsNoTracking()
-                    .Include(u => u.Roles)
+                    .Include(u => u.UserRoles)
                     .FirstAsync(u => u.Id == id),
 
                 Roles = _roles

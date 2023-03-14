@@ -11,6 +11,15 @@
   <component name="ChangeListManager">
     <list default="true" id="91550e4e-c91b-4a31-bafa-666e25656f41" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/.idea.anigure/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.anigure/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Anigure/Areas/Identity/Pages/Account/Register.cshtml.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Anigure/Areas/Identity/Pages/Account/Register.cshtml.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Anigure/Controllers/UsersController.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Anigure/Controllers/UsersController.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Anigure/Data/ApplicationDbContext.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Anigure/Data/ApplicationDbContext.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Anigure/Data/ApplicationUser.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Anigure/Data/ApplicationUser.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Anigure/Data/SeedData.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Anigure/Data/SeedData.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Anigure/Migrations/ApplicationDbContextModelSnapshot.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Anigure/Migrations/ApplicationDbContextModelSnapshot.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Anigure/Program.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Anigure/Program.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Anigure/Views/Users/Edit.cshtml" beforeDir="false" afterPath="$PROJECT_DIR$/Anigure/Views/Users/Edit.cshtml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Anigure/Views/Users/Index.cshtml" beforeDir="false" afterPath="$PROJECT_DIR$/Anigure/Views/Users/Index.cshtml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -25,7 +34,11 @@
     </option>
   </component>
   <component name="HighlightingSettingsPerFile">
+    <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/SourcesCache/8e25cce28490c87faaf15522967e96692c1829b521f6b7a4fc8bde524eec/IdentityRole.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/SourcesCache/bd1d5c50194fea68ff3559c160230b0ab50f5acf4ce3061bffd6d62958e2182/ExceptionDispatchInfo.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/SourcesCache/f91195dc1f983d6ec69125bd192fea551738920a3ae32077f21c5af5b9/UserManager.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock://C:/github/rhinock/anigure/Anigure/Data/ApplicationUser.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Anigure/wwwroot/lib/bootstrap/dist/css/bootstrap.min.css.map" root0="FORCE_HIGHLIGHTING" />
   </component>
   <component name="MarkdownSettingsMigration">
     <option name="stateVersion" value="1" />
@@ -52,7 +65,7 @@
     ]
   }
 }</component>
-  <component name="RunManager" selected=".NET Launch Settings Profile.anigure">
+  <component name="RunManager" selected=".NET Launch Settings Profile.Anigure: http">
     <configuration name="Anigure: FTPProfile" type="DotNetMsBuildPublish" factoryName="Publish to IIS">
       <riderPublish configuration="Release" platform="Any CPU" publish_profile="FTPProfile.pubxml" pubxml_path="$PROJECT_DIR$/Anigure/Properties/PublishProfiles/FTPProfile.pubxml" user_name="jtzrrsqpswnpeiso" uuid_high="329933501797188680" uuid_low="-7632178081313877827" />
       <method v="2" />
@@ -143,6 +156,7 @@
       <updated>1676476719835</updated>
       <workItem from="1676476721677" duration="860000" />
       <workItem from="1678117777711" duration="2015000" />
+      <workItem from="1678820856487" duration="2206000" />
     </task>
     <servers />
   </component>
